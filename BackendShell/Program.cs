@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using API.Enums;
-using API.Models;
+using API.DataModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 

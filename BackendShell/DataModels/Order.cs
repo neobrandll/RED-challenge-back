@@ -1,7 +1,7 @@
 using System;
 using API.Enums;
 
-namespace API.Models
+namespace API.DataModels
 {
     public class Order
     {
