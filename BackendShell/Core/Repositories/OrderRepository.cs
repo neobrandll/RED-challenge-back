@@ -96,9 +96,12 @@ namespace API.Core.Repositories
             {
                 var result = await _context.Orders.FindAsync(order.OrderId);
                 if (result == null) return null;
-                result = order;
+                result.CreatedDate = order.CreatedDate;
+                result.CustomerName = order.CustomerName;
+                result.OrderType = order.OrderType;
+                result.CreatedByUserName = order.CreatedByUserName;
 
-                 _context.SaveChanges();
+                _context.SaveChanges();
 
                 return new OrderProjection(order);
             }
