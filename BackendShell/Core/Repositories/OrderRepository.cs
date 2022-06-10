@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Core.Repositories
 {
-    public class OrderRepository : GenericRepository<Order>, IOrderRepository
+    public class OrderRepository : GenericRepository, IOrderRepository
     {
 
         public OrderRepository(
@@ -71,7 +71,7 @@ namespace API.Core.Repositories
                 return new List<OrderProjection>();
             }
         }
-        public async Task<IEnumerable<OrderProjection>> GetAll(OrderQuery orderQuery)
+        public async Task<IEnumerable<OrderProjection>> GetAll(OrderQueryModel orderQuery)
         {
             try
             {

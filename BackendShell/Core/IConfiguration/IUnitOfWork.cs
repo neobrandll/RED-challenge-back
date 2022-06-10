@@ -6,6 +6,7 @@ namespace API.Core.IConfiguration
     public interface IUnitOfWork
     {
         IOrderRepository Orders { get; }
+        IAuthRepository Auth { get; }
 
         Task CompleteAsync();
     }

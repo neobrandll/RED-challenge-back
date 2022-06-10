@@ -96,7 +96,7 @@ namespace API.Controllers
 
         // Search
         [HttpGet("/search")]
-        public async Task<JsonResult> Search([FromQuery]OrderQuery orderQuery  )
+        public async Task<JsonResult> Search([FromQuery]OrderQueryModel orderQuery  )
         {
             if (!ModelState.IsValid)
             {

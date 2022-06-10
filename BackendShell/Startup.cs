@@ -30,9 +30,18 @@ namespace API
                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSwaggerGen();
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(
+                options =>
+                {
+                    // Configuring the Password
+                    options.Password.RequiredLength = 5;
+                    options.Password.RequireNonAlphanumeric = false;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+           
+
+            
             // Adding authorization handler
             services.AddScoped<IAuthorizationHandler, OrderCreatorAuthorizationHandler>();
 

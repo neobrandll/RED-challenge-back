@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace API.Core.Repositories
 {
-    public class GenericRepository<T> where T : class
+    public class GenericRepository    
     {
 
         protected ApplicationDbContext _context;

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace API.Models
 {
-    public class OrderQuery
+    public class OrderQueryModel
     {
         [BindRequired]
         public string customerName { get; set; }

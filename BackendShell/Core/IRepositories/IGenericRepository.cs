@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 
 namespace API.Core.IRepositories
 {
-    public interface IGenericRepository<T> where T : class
+    public interface IGenericRepository  
     {
         
-        Task<bool> Delete(int id);
-
-           
+                   
 
     }
 }
