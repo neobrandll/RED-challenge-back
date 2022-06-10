@@ -70,7 +70,7 @@ namespace API.Controllers
 
                  _context.SaveChanges();
 
-            return new JsonResult(Ok(order));
+            return new JsonResult(Ok(new OrderProjection(order)));
         }
 
 
