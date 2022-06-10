@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using API.Core.IConfiguration;
 using API.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using API.Authorization;
 
 namespace API
 {
@@ -30,6 +32,9 @@ namespace API
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // Adding authorization handler
+            services.AddScoped<IAuthorizationHandler, OrderCreatorAuthorizationHandler>();
 
             // Adding the Unit of work to the DI container
             services.AddScoped<IUnitOfWork, UnitOfWork>();        }

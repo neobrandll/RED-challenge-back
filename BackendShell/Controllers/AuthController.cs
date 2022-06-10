@@ -7,5 +7,13 @@ namespace API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+
+        // Register
+        [HttpPost]
+        public async Task<JsonResult> Create(Order order)
+        {
+            
+            return new JsonResult(Problem("Something went wrong"));
+        }
     }
 }

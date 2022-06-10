@@ -81,7 +81,7 @@ namespace API.Controllers
             var isAuthorized = await _authorizationService.AuthorizeAsync(User, order, OrderOperations.Update);
 
             if(!isAuthorized.Succeeded == false)
-                return JsonResult(Forbid());
+                return new JsonResult(Forbid());
 
             var result = await _unitOfWork.Orders.Update(order);
 
