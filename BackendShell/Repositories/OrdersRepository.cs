@@ -7,12 +7,12 @@ using API.DataModels;
 
 namespace API.Services
 {
-    public class OrdersService : IOrdersService
+    public class OrdersRepository : IOrdersService
     {
 
         private readonly ApplicationDbContext _context;
 
-        public OrdersService(ApplicationDbContext context)
+        public OrdersRepository(ApplicationDbContext context)
         {
             _context = context;
 

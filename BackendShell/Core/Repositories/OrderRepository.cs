@@ -19,21 +19,27 @@ namespace API.Core.Repositories
         {
 
         }
-        Task<OrderProjection> IOrderRepository.Create(Order order)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IOrderRepository> IGenericRepository<IOrderRepository>.Create(IOrderRepository entity)
-        {
-            throw new NotImplementedException();
-        }
-
-       public override async Task<bool> Delete(Guid id)
+      
+       public async Task<OrderProjection> Create(Order entity)
         {
             try
             {
-                var result = _context.Orders.Find(id);
+                _context.Orders.Add(entity);
+                await _context.SaveChangesAsync();
+                return new OrderProjection(entity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} Create method error", typeof(OrderRepository));
+                return null;
+            }
+        }
+
+       public async Task<bool> Delete(Guid id)
+        {
+            try
+            {
+                var result = await _context.Orders.FindAsync(id);
 
                 if (result == null)
                     return false;
@@ -84,7 +90,7 @@ namespace API.Core.Repositories
 
        
       
-        public override async Task<OrderProjection> Update(Order order)
+        public async Task<OrderProjection> Update(Order order)
         {
             try
             {
@@ -99,14 +105,10 @@ namespace API.Core.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "{Repo} Get All method error", typeof(OrderRepository));
+                _logger.LogError(ex, "{Repo} Update method error", typeof(OrderRepository));
                 return null;
             }
         }
 
-        Task<IOrderRepository> IGenericRepository<IOrderRepository>.Update(IOrderRepository entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+          }
 }
