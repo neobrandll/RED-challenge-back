@@ -35,7 +35,7 @@ namespace API.Core.Repositories
             }
         }
 
-       public async Task<bool> Delete(Guid id)
+       public async Task<bool> Delete(int id)
         {
             try
             {
@@ -95,11 +95,10 @@ namespace API.Core.Repositories
             try
             {
                 var result = await _context.Orders.FindAsync(order.OrderId);
-                if (result == null)
-                    return null;
+                if (result == null) return null;
                 result = order;
 
-                await _context.SaveChangesAsync();
+                 _context.SaveChanges();
 
                 return new OrderProjection(order);
             }

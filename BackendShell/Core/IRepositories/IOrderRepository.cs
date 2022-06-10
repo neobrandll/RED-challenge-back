@@ -12,5 +12,6 @@ namespace API.Core.IRepositories
         Task<OrderProjection> Update(Order order);
 
         Task<IEnumerable<OrderProjection>> GetAll(OrderQuery orderQuery);
+        Task<IEnumerable<OrderProjection>> GetAll();
     }
 }

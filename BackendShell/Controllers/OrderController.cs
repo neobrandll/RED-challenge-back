@@ -6,6 +6,9 @@ using API.DataModels;
 using API.Enums;
 using API.Projections;
 using API.Models;
+using Microsoft.Extensions.Logging;
+using API.Core.IConfiguration;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -14,79 +17,84 @@ namespace API.Controllers
     public class OrderController : ControllerBase
     {
 
-        private readonly ApplicationDbContext _context;
-
-        public OrderController(ApplicationDbContext context)
+        private readonly ILogger<OrderController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
+        public OrderController(ILogger<OrderController> logger, IUnitOfWork unitOfWork)
         {
-            _context = context;
-
+          _logger = logger;
+          _unitOfWork = unitOfWork;
         }
 
 
         // Get all
         [HttpGet()]
-        public JsonResult GetAll()
+        public async Task<JsonResult> GetAll()
         {
-        var result = from order in _context.Orders
-        select new OrderProjection(order);
-           
+
+            var result = await _unitOfWork.Orders.GetAll();         
             return new JsonResult(Ok(result));
         }
 
         // Delete
         [HttpDelete]
-        public JsonResult Delete(int id)
+        public async Task<JsonResult> Delete(int id)
         {
-            var result = _context.Orders.Find(id);
-
-            if (result == null)
+            var result = await _unitOfWork.Orders.Delete(id);
+            if (result == false)
                 return new JsonResult(NotFound());
 
-            _context.Orders.Remove(result);
-            _context.SaveChanges();
-
+            await _unitOfWork.CompleteAsync();
             return new JsonResult(NoContent());
         }
 
         // Create
         [HttpPost]
-        public JsonResult Create(Order order)
-        {
-         _context.Orders.Add(order);
-         _context.SaveChanges();
-
-         return new JsonResult(Ok(new OrderProjection(order)));
-        }
-
-
-        // Update
-        [HttpPut]
-        public JsonResult Update(Order order)
-        {
-            var result = _context.Orders.Find(order.OrderId);
-            if (result == null)
-                return new JsonResult(NotFound());
-            result = order;
-
-                 _context.SaveChanges();
-
-            return new JsonResult(Ok(new OrderProjection(order)));
-        }
-
-
-        // Search
-        [HttpGet("/search")]
-        public JsonResult Search([FromQuery]OrderQuery orderQuery  )
+        public async Task<JsonResult> Create(Order order)
         {
             if (!ModelState.IsValid)
             {
                 return new JsonResult(BadRequest());
             }
-            var result = from order in _context.Orders
-                         where order.OrderType == orderQuery.orderType
-                         where order.CustomerName.Contains(orderQuery.customerName)
-                         select new OrderProjection(order);
-                         return new JsonResult(Ok(result));
+            var result = await _unitOfWork.Orders.Create(order);
+            if (result != null)
+            {
+                await _unitOfWork.CompleteAsync();
+                return new JsonResult(Ok(result));
+            }
+
+            return new JsonResult(Problem("Something went wrong"));
+        }
+
+
+        // Update
+        [HttpPut]
+        public async Task<JsonResult> Update(Order order)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(BadRequest());
+            }
+            var result = await _unitOfWork.Orders.Update(order);
+
+            if (result != null) {
+                await _unitOfWork.CompleteAsync();
+                return new JsonResult(Ok(result));
+            } 
+
+            return new JsonResult(Problem("Something went wrong"));
+        }
+
+
+        // Search
+        [HttpGet("/search")]
+        public async Task<JsonResult> Search([FromQuery]OrderQuery orderQuery  )
+        {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(BadRequest());
+            }
+            var result = await _unitOfWork.Orders.GetAll(orderQuery);
+            return new JsonResult(Ok(result));
         }
 
 

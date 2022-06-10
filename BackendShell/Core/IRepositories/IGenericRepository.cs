@@ -7,7 +7,7 @@ namespace API.Core.IRepositories
     public interface IGenericRepository<T> where T : class
     {
         
-        Task<bool> Delete(Guid id);
+        Task<bool> Delete(int id);
 
            
 
