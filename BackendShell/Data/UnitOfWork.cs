@@ -1,7 +1,9 @@
 ﻿using API.Core.IConfiguration;
 using API.Core.IRepositories;
+using API.Core.Repositories;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace API.Data
 {
@@ -13,9 +15,28 @@ namespace API.Data
 
         public IOrderRepository Orders { get; private set; }
 
-        public UnitOfWork()
+        public UnitOfWork(ApplicationDbContext context,
+                ILoggerFactory loggerFactory)
         {
-            ApplicationDbContext context,
-                ILoggerFactory loggerFactory        }
+            _context = context;
+            _logger = loggerFactory.CreateLogger("logs");
+            Orders = new OrderRepository(_context, _logger);
+                 }
+
+        public async Task CompleteAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public void  Dispose()
+        {
+             _context.Dispose();
+        }
+
+        public void Dispose()
+        {
+             _context.Dispose();
+        }
+
     }
 }
