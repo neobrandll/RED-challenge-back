@@ -8,13 +8,13 @@ namespace API.Controllers
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<Projections.Order> Get()
-        {
-            // rewrite to use IDataProvider using dependency injection
-            var data = Program.Data.Values.Select(o => new Projections.Order(o));
-            return data;
-        }
+        //[HttpGet]
+        //public IEnumerable<Projections.Order> Get()
+        //{
+        //    // rewrite to use IDataProvider using dependency injection
+        //    //var data = Program.Data.Values.Select(o => new Projections.Order(o));
+        //    //return data;
+        //}
 
         // Add a Search endpoint
 
