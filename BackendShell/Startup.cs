@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using API.Core.IConfiguration;
 using API.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace API
 {
@@ -26,6 +27,9 @@ namespace API
             services.AddDbContext<ApplicationDbContext>(options =>
                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSwaggerGen();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Adding the Unit of work to the DI container
             services.AddScoped<IUnitOfWork, UnitOfWork>();        }
@@ -60,6 +64,7 @@ namespace API
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

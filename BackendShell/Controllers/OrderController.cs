@@ -9,6 +9,8 @@ using API.Models;
 using Microsoft.Extensions.Logging;
 using API.Core.IConfiguration;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using API.Authorization;
 
 namespace API.Controllers
 {
@@ -19,10 +21,12 @@ namespace API.Controllers
 
         private readonly ILogger<OrderController> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        public OrderController(ILogger<OrderController> logger, IUnitOfWork unitOfWork)
+        private readonly IAuthorizationService _authorizationService;
+        public OrderController(ILogger<OrderController> logger, IUnitOfWork unitOfWork, IAuthorizationService authorizationService)
         {
           _logger = logger;
           _unitOfWork = unitOfWork;
+          _authorizationService = authorizationService;
         }
 
 
@@ -74,6 +78,11 @@ namespace API.Controllers
             {
                 return new JsonResult(BadRequest());
             }
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, order, OrderOperations.Update);
+
+            if(!isAuthorized.Succeeded == false)
+                return JsonResult(Forbid());
+
             var result = await _unitOfWork.Orders.Update(order);
 
             if (result != null) {
