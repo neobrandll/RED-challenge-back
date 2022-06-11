@@ -24,13 +24,11 @@ namespace API.Controllers
         private readonly ILogger<OrderController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAuthorizationService _authorizationService;
-        private readonly UserManager<IdentityUser> _userManager;
-        public OrderController(ILogger<OrderController> logger, IUnitOfWork unitOfWork, IAuthorizationService authorizationService, UserManager<IdentityUser> userManager)
+        public OrderController(ILogger<OrderController> logger, IUnitOfWork unitOfWork, IAuthorizationService authorizationService)
         {
           _logger = logger;
           _unitOfWork = unitOfWork;
           _authorizationService = authorizationService;
-          _userManager = userManager;
         }
 
 
@@ -64,7 +62,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            var username = _userManager.GetUserName(User);
+            var username = _unitOfWork.UserManager.GetUserName(User);
             if (User == null || username == null ) return Unauthorized();
             Order orderData = new Order();
             orderData.CustomerName = order.CustomerName;
@@ -92,7 +90,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            var username = _userManager.GetUserName(User);
+            var username = _unitOfWork.UserManager.GetUserName(User);
 
             if (User == null || username == null)
                 return Unauthorized();

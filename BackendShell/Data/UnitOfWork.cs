@@ -14,9 +14,11 @@ namespace API.Data
 
         private readonly ILogger _logger;
 
-        private readonly UserManager<IdentityUser> _userManager;
+        //public readonly UserManager<IdentityUser> _userManager;
 
         private readonly SignInManager<IdentityUser> _signInManager;
+
+        public UserManager<IdentityUser> UserManager { get; private set; }
 
         public IOrderRepository Orders { get; private set; }
 
@@ -32,10 +34,11 @@ namespace API.Data
             _context = context;
             _logger = loggerFactory.CreateLogger("logs");
             _signInManager = signInManager;
-            _userManager =  userManager;
+            //_userManager =  userManager;
+            UserManager = userManager;
 
             Orders = new OrderRepository(_context, _logger);
-            Auth = new AuthRepository(_context, _logger, _userManager, _signInManager);
+            Auth = new AuthRepository(_context, _logger, userManager, _signInManager);
 
         }
 
