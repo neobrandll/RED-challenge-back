@@ -17,7 +17,7 @@ namespace API.Authorization
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Order order)
         {
-            if (context.User == null || order == null)
+          if (context.User == null || order == null)
                 return Task.CompletedTask;
 
             if (requirement.Name != Constants.UpdateOperationName && requirement.Name != Constants.DeleteOperationName)

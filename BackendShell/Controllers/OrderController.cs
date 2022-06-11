@@ -93,12 +93,12 @@ namespace API.Controllers
                 return new JsonResult(BadRequest());
             }
             var username = _userManager.GetUserName(User);
-            var isAuthorized = await _authorizationService.AuthorizeAsync(User, order, OrderOperations.Update);
-
-            if(isAuthorized.Succeeded == false || User == null || username == null)
+            
+            if(User == null || username == null)
                 return new JsonResult(Unauthorized());
 
             Order orderData = new Order();
+            orderData.OrderId = order.OrderId;
             orderData.CustomerName = order.CustomerName;
             orderData.OrderType = order.OrderType;
             orderData.CustomerName = order.CustomerName;
