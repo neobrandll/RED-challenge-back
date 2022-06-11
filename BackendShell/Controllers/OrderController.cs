@@ -99,7 +99,6 @@ namespace API.Controllers
             orderData.OrderId = order.OrderId;
             orderData.CustomerName = order.CustomerName;
             orderData.OrderType = order.OrderType;
-            orderData.CustomerName = order.CustomerName;
             orderData.CreatedDate = order.CreatedDate;
             orderData.CreatedByUserName = username;
 
