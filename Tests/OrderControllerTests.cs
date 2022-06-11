@@ -76,44 +76,44 @@ namespace Tests
             Assert.Equal(new NotFoundResult().StatusCode, result.StatusCode);
         }
 
-        [Fact]
-        public async Task Create_ShouldInsertUserName()
-        {
+        //[Fact]
+        //public async Task Create_ShouldInsertUserName()
+        //{
 
-            var user = new Mock<ClaimsPrincipal>();
+        //    var user = new Mock<ClaimsPrincipal>();
 
-            _unitOfWork.Setup(x => x.UserManager.GetUserName(user.Object)).Returns("testUser");
+        //    _unitOfWork.Setup(x => x.UserManager.GetUserName(user.Object)).Returns("testUser");
             
-            Order o = new Order
-            {
-                OrderId = 0,
-                OrderType = 0,
-                CustomerName = "string",
-                CreatedDate = new System.DateTime(),
-                CreatedByUserName = "testUser",
-            };
-            OrderProjection orderFormatted = new OrderProjection(o);
+        //    Order o = new Order
+        //    {
+        //        OrderId = 0,
+        //        OrderType = 0,
+        //        CustomerName = "string",
+        //        CreatedDate = new System.DateTime(),
+        //        CreatedByUserName = "testUser",
+        //    };
+        //    OrderProjection orderFormatted = new OrderProjection(o);
             
 
-            _unitOfWork.Setup(x => x.Orders.Create(o)).ReturnsAsync(orderFormatted);
+        //    _unitOfWork.Setup(x => x.Orders.Create(o)).ReturnsAsync(orderFormatted);
 
 
-            OrderModel orderBody = new OrderModel
-            {
-                OrderId = 0,
-                OrderType = 0,
-                CustomerName = "string",
-                CreatedDate = new System.DateTime(),
-            };
+        //    OrderModel orderBody = new OrderModel
+        //    {
+        //        OrderId = 0,
+        //        OrderType = 0,
+        //        CustomerName = "string",
+        //        CreatedDate = new System.DateTime(),
+        //    };
 
-            // Act
-            var operationResult = await _orderController.Create(orderBody);
-            var value = operationResult as OkObjectResult;
+        //    // Act
+        //    var operationResult = await _orderController.Create(orderBody);
+        //    var value = operationResult as OkObjectResult;
 
-            // Assert
+        //    // Assert
 
-            Assert.Equal(orderFormatted, value.Value);
-        }
+        //    Assert.Equal(orderFormatted, value.Value);
+        //}
     }
 }
 
