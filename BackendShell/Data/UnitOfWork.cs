@@ -14,8 +14,6 @@ namespace API.Data
 
         private readonly ILogger _logger;
 
-        //public readonly UserManager<IdentityUser> _userManager;
-
         private readonly SignInManager<IdentityUser> _signInManager;
 
         public UserManager<IdentityUser> UserManager { get; private set; }
@@ -34,7 +32,6 @@ namespace API.Data
             _context = context;
             _logger = loggerFactory.CreateLogger("logs");
             _signInManager = signInManager;
-            //_userManager =  userManager;
             UserManager = userManager;
 
             Orders = new OrderRepository(_context, _logger);

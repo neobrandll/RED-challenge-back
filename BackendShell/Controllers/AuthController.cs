@@ -39,13 +39,12 @@ namespace API.Controllers
         public async Task<ActionResult> Login(LoginModel loginBody)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var result = await _unitOfWork.Auth.Login(loginBody);
-            if (result != null)
+            var user = await _unitOfWork.Auth.Login(loginBody);
+            if (user != null)
             {
-                if (result.Succeeded) return Ok();
-                return BadRequest();
+                return Ok(user);
             }
-            return Problem("Something went wrong");
+                return BadRequest();
         }
     }
 }

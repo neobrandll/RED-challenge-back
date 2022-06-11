@@ -1,6 +1,7 @@
 ﻿using API.Core.IRepositories;
 using API.Models;
 using API.Models.Auth;
+using API.Projections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
@@ -26,12 +27,19 @@ namespace API.Core.Repositories
             _signInManager = signInManager;
         }
 
-        public async Task<SignInResult> Login(LoginModel loginBody)
+        public async Task<UserProjection> Login(LoginModel loginBody)
         {
             try
             {
                 var result = await _signInManager.PasswordSignInAsync(loginBody.UserName, loginBody.Password, false, false);
-                return result;
+                if (result.Succeeded)
+                {
+                    var user = await _userMagager.FindByNameAsync(loginBody.UserName);
+                    var userFormatted = new UserProjection(user);
+                    return userFormatted;
+                }
+
+                return null;
             }
             catch (Exception ex)
             {
