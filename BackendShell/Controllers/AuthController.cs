@@ -21,31 +21,31 @@ namespace API.Controllers
 
         // Register
         [HttpPost("/Register")]
-        public async Task<JsonResult> Register(RegisterModel registerBody)
+        public async Task<ActionResult> Register(RegisterModel registerBody)
         {
-            if (!ModelState.IsValid) return new JsonResult(BadRequest());
+            if (!ModelState.IsValid) return BadRequest();
            var result  = await _unitOfWork.Auth.Register(registerBody);
             if(result != null)
             {
-                if (result.Succeeded) return new JsonResult(Ok());
-                return new JsonResult(BadRequest(result.Errors));
+                if (result.Succeeded) return Ok();
+                return BadRequest(result.Errors);
             }
-            return new JsonResult(Problem("Something went wrong"));
+            return Problem("Something went wrong");
 
         }
 
         // Login
         [HttpPost("/Login")]
-        public async Task<JsonResult> Login(LoginModel loginBody)
+        public async Task<ActionResult> Login(LoginModel loginBody)
         {
-            if (!ModelState.IsValid) return new JsonResult(BadRequest());
+            if (!ModelState.IsValid) return BadRequest();
             var result = await _unitOfWork.Auth.Login(loginBody);
             if (result != null)
             {
-                if (result.Succeeded) return new JsonResult(Ok());
-                return new JsonResult(BadRequest());
+                if (result.Succeeded) return Ok();
+                return BadRequest();
             }
-            return new JsonResult(Problem("Something went wrong"));
+            return Problem("Something went wrong");
         }
     }
 }

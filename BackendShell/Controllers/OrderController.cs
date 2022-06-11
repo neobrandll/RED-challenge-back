@@ -37,35 +37,35 @@ namespace API.Controllers
         // Get all
         [HttpGet()]
         [AllowAnonymous]
-        public async Task<JsonResult> GetAll()
+        public async Task<ActionResult> GetAll()
         {
 
-            var result = await _unitOfWork.Orders.GetAll();         
-            return new JsonResult(Ok(result));
+           var result = await _unitOfWork.Orders.GetAll();
+            return Ok(result);
         }
 
         // Delete
         [HttpDelete]
-        public async Task<JsonResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             var result = await _unitOfWork.Orders.Delete(id);
             if (result == false)
-                return new JsonResult(NotFound());
+                return NotFound();
 
             await _unitOfWork.CompleteAsync();
-            return new JsonResult(NoContent());
+            return NoContent();
         }
 
         // Create
         [HttpPost]
-        public async Task<JsonResult> Create(OrderModel order)
+        public async Task<ActionResult> Create(OrderModel order)
         {
             if (!ModelState.IsValid)
             {
-                return new JsonResult(BadRequest());
+                return BadRequest();
             }
             var username = _userManager.GetUserName(User);
-            if (User == null || username == null ) return new JsonResult(Unauthorized());
+            if (User == null || username == null ) return Unauthorized();
             Order orderData = new Order();
             orderData.CustomerName = order.CustomerName;
             orderData.OrderType = order.OrderType;
@@ -77,25 +77,25 @@ namespace API.Controllers
             if (result != null)
             {
                 await _unitOfWork.CompleteAsync();
-                return new JsonResult(Ok(result));
+                return Ok(result);
             }
 
-            return new JsonResult(Problem("Something went wrong"));
+            return Problem("Something went wrong");
         }
 
 
         // Update
         [HttpPut]
-        public async Task<JsonResult> Update(OrderModel order)
+        public async Task<ActionResult> Update(OrderModel order)
         {
             if (!ModelState.IsValid)
             {
-                return new JsonResult(BadRequest());
+                return BadRequest();
             }
             var username = _userManager.GetUserName(User);
-            
-            if(User == null || username == null)
-                return new JsonResult(Unauthorized());
+
+            if (User == null || username == null)
+                return Unauthorized();
 
             Order orderData = new Order();
             orderData.OrderId = order.OrderId;
@@ -109,24 +109,24 @@ namespace API.Controllers
 
             if (result != null) {
                 await _unitOfWork.CompleteAsync();
-                return new JsonResult(Ok(result));
-            } 
+                return Ok(result);
+            }
 
-            return new JsonResult(Problem("Something went wrong"));
+            return Problem("Something went wrong");
         }
 
 
         // Search
         [HttpGet("/search")]
         [AllowAnonymous]
-        public async Task<JsonResult> Search([FromQuery]OrderQueryModel orderQuery  )
+        public async Task<ActionResult> Search([FromQuery]OrderQueryModel orderQuery  )
         {
             if (!ModelState.IsValid)
             {
-                return new JsonResult(BadRequest());
+                return BadRequest();
             }
             var result = await _unitOfWork.Orders.GetAll(orderQuery);
-            return new JsonResult(Ok(result));
+            return Ok(result);
         }
 
 
