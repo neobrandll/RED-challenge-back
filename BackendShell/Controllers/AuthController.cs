@@ -1,14 +1,16 @@
 ﻿using API.Core.IConfiguration;
 using API.Models;
 using API.Models.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -18,7 +20,7 @@ namespace API.Controllers
         }
 
         // Register
-        [HttpPost("/register")]
+        [HttpPost("/Register")]
         public async Task<JsonResult> Register(RegisterModel registerBody)
         {
             if (!ModelState.IsValid) return new JsonResult(BadRequest());
@@ -33,7 +35,7 @@ namespace API.Controllers
         }
 
         // Login
-        [HttpPost("/login")]
+        [HttpPost("/Login")]
         public async Task<JsonResult> Login(LoginModel loginBody)
         {
             if (!ModelState.IsValid) return new JsonResult(BadRequest());

@@ -1,7 +1,7 @@
 ﻿using API.Enums;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace API.Models
+namespace API.Models.Orders
 {
     public class OrderQueryModel
     {

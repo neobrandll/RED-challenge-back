@@ -11,27 +11,32 @@ using API.Core.IConfiguration;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using API.Authorization;
+using API.Models.Orders;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class OrderController : ControllerBase
+      public class OrderController : ControllerBase
     {
 
         private readonly ILogger<OrderController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAuthorizationService _authorizationService;
-        public OrderController(ILogger<OrderController> logger, IUnitOfWork unitOfWork, IAuthorizationService authorizationService)
+        private readonly UserManager<IdentityUser> _userManager;
+        public OrderController(ILogger<OrderController> logger, IUnitOfWork unitOfWork, IAuthorizationService authorizationService, UserManager<IdentityUser> userManager)
         {
           _logger = logger;
           _unitOfWork = unitOfWork;
           _authorizationService = authorizationService;
+          _userManager = userManager;
         }
 
 
         // Get all
         [HttpGet()]
+        [AllowAnonymous]
         public async Task<JsonResult> GetAll()
         {
 
@@ -53,13 +58,22 @@ namespace API.Controllers
 
         // Create
         [HttpPost]
-        public async Task<JsonResult> Create(Order order)
+        public async Task<JsonResult> Create(OrderModel order)
         {
             if (!ModelState.IsValid)
             {
                 return new JsonResult(BadRequest());
             }
-            var result = await _unitOfWork.Orders.Create(order);
+            var username = _userManager.GetUserName(User);
+            if (User == null || username == null ) return new JsonResult(Unauthorized());
+            Order orderData = new Order();
+            orderData.CustomerName = order.CustomerName;
+            orderData.OrderType = order.OrderType;
+            orderData.CustomerName = order.CustomerName;
+            orderData.CreatedDate = order.CreatedDate;
+            orderData.CreatedByUserName = username;
+
+            var result = await _unitOfWork.Orders.Create(orderData);
             if (result != null)
             {
                 await _unitOfWork.CompleteAsync();
@@ -72,18 +86,26 @@ namespace API.Controllers
 
         // Update
         [HttpPut]
-        public async Task<JsonResult> Update(Order order)
+        public async Task<JsonResult> Update(OrderModel order)
         {
             if (!ModelState.IsValid)
             {
                 return new JsonResult(BadRequest());
             }
+            var username = _userManager.GetUserName(User);
             var isAuthorized = await _authorizationService.AuthorizeAsync(User, order, OrderOperations.Update);
 
-            if(!isAuthorized.Succeeded == false)
-                return new JsonResult(Forbid());
+            if(isAuthorized.Succeeded == false || User == null || username == null)
+                return new JsonResult(Unauthorized());
 
-            var result = await _unitOfWork.Orders.Update(order);
+            Order orderData = new Order();
+            orderData.CustomerName = order.CustomerName;
+            orderData.OrderType = order.OrderType;
+            orderData.CustomerName = order.CustomerName;
+            orderData.CreatedDate = order.CreatedDate;
+            orderData.CreatedByUserName = username;
+
+            var result = await _unitOfWork.Orders.Update(orderData);
 
             if (result != null) {
                 await _unitOfWork.CompleteAsync();
@@ -96,6 +118,7 @@ namespace API.Controllers
 
         // Search
         [HttpGet("/search")]
+        [AllowAnonymous]
         public async Task<JsonResult> Search([FromQuery]OrderQueryModel orderQuery  )
         {
             if (!ModelState.IsValid)
