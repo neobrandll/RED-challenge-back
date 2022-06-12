@@ -88,8 +88,13 @@ namespace API.Core.Repositories
             }
         }
 
-       
-      
+        public async Task<Order> GetById(int id)
+        {
+            var result = await _context.Orders.FindAsync(id);
+            if (result == null) return null;
+            return result;
+        }
+
         public async Task<OrderProjection> Update(Order order)
         {
             try

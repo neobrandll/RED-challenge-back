@@ -13,7 +13,10 @@ namespace API.Core.IRepositories
 
         Task<bool> Delete(int id);
 
+        Task<Order> GetById(int id);
+
         Task<IEnumerable<OrderProjection>> GetAll(OrderQueryModel orderQuery);
         Task<IEnumerable<OrderProjection>> GetAll();
+
     }
 }

@@ -54,6 +54,16 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> GetById(int id)
+        {
+            var result = await _unitOfWork.Orders.GetById(id);
+            if (result == null)
+                return NotFound();
+            SingleOrderProjection orderFormatted = new SingleOrderProjection(result);
+                return Ok(orderFormatted);
+                   }
+
         // Create
         [HttpPost]
         public async Task<ActionResult> Create(OrderModel order)
