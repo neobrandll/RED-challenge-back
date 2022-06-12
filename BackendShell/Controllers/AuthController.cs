@@ -1,6 +1,7 @@
 ﻿using API.Core.IConfiguration;
 using API.Models;
 using API.Models.Auth;
+using API.Projections;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,11 @@ namespace API.Controllers
            var result  = await _unitOfWork.Auth.Register(registerBody);
             if(result != null)
             {
-                if (result.Succeeded) return Ok();
+                if (result.Succeeded) {
+                    var user = await _unitOfWork.UserManager.FindByNameAsync(registerBody.UserName);
+                    UserProjection userFormatted = new UserProjection(user);
+                    return Ok(userFormatted);
+                } 
                 return BadRequest(result.Errors);
             }
             return Problem("Something went wrong");

@@ -9,6 +9,7 @@ using API.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using API.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace API
 {
@@ -42,14 +43,21 @@ namespace API
 
             services.AddAuthorization();
 
-           
 
-            
+            services.ConfigureApplicationCookie(options =>
+            {
+                //options.Cookie.HttpOnly = false;
+                options.Cookie.SameSite = SameSiteMode.None;
+            });
+
+
+
             // Adding authorization handler
             services.AddScoped<IAuthorizationHandler, OrderCreatorAuthorizationHandler>();
 
             // Adding the Unit of work to the DI container
             services.AddScoped<IUnitOfWork, UnitOfWork>();        }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -83,12 +91,14 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors(x => x
+            app.UseCors(x =>
+            x
               .AllowAnyMethod()
               .AllowAnyHeader()
               .SetIsOriginAllowed(origin => true) // allow any origin
               .AllowCredentials()); // allow credentials
 
+           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
