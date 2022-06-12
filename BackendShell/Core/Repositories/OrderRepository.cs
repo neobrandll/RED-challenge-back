@@ -72,16 +72,27 @@ namespace API.Core.Repositories
         {
             try
             {
-                var result = from order in _context.Orders
-                             where order.OrderType == orderQuery.orderType
-                             where order.CustomerName.Contains(orderQuery.customerName)
-                             select new OrderProjection(order);
-                return await result.ToListAsync();
+                IQueryable<Order> result = _context.Orders;
+                if (orderQuery.orderType != null)
+                {
+                    result = result.Where(x => x.OrderType == orderQuery.orderType);
+                }
+                if (orderQuery.customerName != null)
+                {
+                    result = result.Where(x => x.CustomerName.Contains(orderQuery.customerName));
+                }
+                if (orderQuery.orderId != null)
+                {
+                    result = result.Where(x => x.OrderId == orderQuery.orderId);
+                }
+                var orders = result.Select(x => new OrderProjection(x));
+                var list = await orders.ToListAsync();
+                return list.AsEnumerable<OrderProjection>();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Repo} Get All method error", typeof(OrderRepository));
-                return new List<OrderProjection>();
+                return null;
             }
         }
 

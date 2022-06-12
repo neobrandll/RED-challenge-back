@@ -63,15 +63,17 @@ namespace Tests
         public async Task Delete_ShouldReturnNotFound_WhenOrderDoesNotExists()
         {
 
-
+            List<int> mockList = new List<int>();
+            mockList.Add(1);
             // Arrange
-             _unitOfWork.Setup(x => x.Orders.Delete(It.IsAny<int>())).ReturnsAsync(false);
+             _unitOfWork.Setup(x => x.Orders.Delete(It.IsAny<List<int>>())).ReturnsAsync(false);
             // Act
-            var operationResult = await _orderController.Delete(2);
+            var operationResult = await _orderController.Delete(mockList);
             var result = operationResult as NotFoundResult;
             
 
             // Assert
+
 
             Assert.Equal(new NotFoundResult().StatusCode, result.StatusCode);
         }

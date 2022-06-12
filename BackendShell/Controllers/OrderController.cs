@@ -133,7 +133,9 @@ namespace API.Controllers
                 return BadRequest();
             }
             var result = await _unitOfWork.Orders.GetAll(orderQuery);
+            if(result != null)
             return Ok(result);
+            else return Problem("Something went wrong");
         }
 
 

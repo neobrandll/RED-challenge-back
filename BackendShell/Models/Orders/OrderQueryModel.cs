@@ -5,9 +5,11 @@ namespace API.Models.Orders
 {
     public class OrderQueryModel
     {
-        [BindRequired]
-        public string customerName { get; set; }
-        [BindRequired]
-        public OrderType orderType { get; set; }
+        #nullable enable
+        public string? customerName { get; set; }
+
+        #nullable enable
+        public int?  orderId { get; set; }
+        public OrderType? orderType { get; set; }
     }
 }
