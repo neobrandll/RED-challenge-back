@@ -35,17 +35,14 @@ namespace API.Core.Repositories
             }
         }
 
-       public async Task<bool> Delete(int id)
+       public async Task<bool> Delete(List<int> ids)
         {
             try
             {
-                var result = await _context.Orders.FindAsync(id);
+                 _context.Orders.RemoveRange(_context.Orders.Where(x => ids.Contains(x.OrderId) ));
 
-                if (result == null)
-                    return false;
-
-                _context.Orders.Remove(result);
-              await  _context.SaveChangesAsync();
+                
+                await  _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)

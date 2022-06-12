@@ -44,9 +44,9 @@ namespace API.Controllers
 
         // Delete
         [HttpDelete]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(List<int> ids)
         {
-            var result = await _unitOfWork.Orders.Delete(id);
+            var result = await _unitOfWork.Orders.Delete(ids);
             if (result == false)
                 return NotFound();
 

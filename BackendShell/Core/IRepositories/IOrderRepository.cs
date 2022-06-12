@@ -11,7 +11,7 @@ namespace API.Core.IRepositories
         Task<OrderProjection> Create(Order order);
         Task<OrderProjection> Update(Order order);
 
-        Task<bool> Delete(int id);
+        Task<bool> Delete(List<int> id);
 
         Task<Order> GetById(int id);
 
