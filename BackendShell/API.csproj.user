@@ -7,5 +7,6 @@
     <ActiveDebugProfile>API</ActiveDebugProfile>
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
+    <NameOfLastUsedPublishProfile>C:\Users\neobr\Documents\code WINDOWS\RED-challenge-back\BackendShell\Properties\PublishProfiles\API20220612211300 - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>
